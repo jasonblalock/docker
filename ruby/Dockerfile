@@ -87,7 +87,7 @@ RUN echo 'appuser ALL=(ALL:ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 RUN mkdir -p $APP_HOME $YARN_CACHE_FOLDER $APPUSER_HOME/.ssh \
     && echo "Host github.com\n\tStrictHostKeyChecking no\n" >> $APPUSER_HOME/.ssh/config \
-    && chown -R appuser:appuser $APP_HOME \
-    && chmod 755 $APP_HOME
+    && chown -R appuser:appuser $APP_HOME $APPUSER_HOME \
+    && chmod -R 755 $APP_HOME $APPUSER_HOME
 
 WORKDIR $APP_HOME

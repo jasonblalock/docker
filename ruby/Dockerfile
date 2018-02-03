@@ -77,20 +77,17 @@ RUN apk add --no-cache \
     tzdata \
     vim
 
-ENV YARN_CACHE_FOLDER=/home/appuser/.cache/yarn
+ENV APPUSER_HOME = /home/appuser
+ENV YARN_CACHE_FOLDER=$APPUSER_HOME/.cache/yarn
 
 RUN addgroup -g 1000 appuser \
     && adduser -u 1000 -G appuser -s /bin/sh -D appuser
 
 RUN echo 'appuser ALL=(ALL:ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-RUN mkdir -p $APP_HOME \
+RUN mkdir -p $APP_HOME $YARN_CACHE_FOLDER $APPUSER_HOME/.ssh \
+    && echo "Host github.com\n\tStrictHostKeyChecking no\n" >> $APPUSER_HOME/.ssh/config \
     && chown -R appuser:appuser $APP_HOME \
     && chmod 755 $APP_HOME
-
-USER appuser
-
-RUN mkdir -p $YARN_CACHE_FOLDER
-RUN mkdir -p ~/.ssh ; echo "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 
 WORKDIR $APP_HOME

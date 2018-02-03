@@ -77,7 +77,7 @@ RUN apk add --no-cache \
     tzdata \
     vim
 
-ENV APPUSER_HOME = /home/appuser
+ENV APPUSER_HOME=/home/appuser
 ENV YARN_CACHE_FOLDER=$APPUSER_HOME/.cache/yarn
 
 RUN addgroup -g 1000 appuser \

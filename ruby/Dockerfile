@@ -66,29 +66,31 @@ RUN apk add --no-cache --virtual .build-deps-yarn \
     && rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz \
     && apk del .build-deps-yarn
 
-RUN apk add --no-cache build-base
-RUN apk add --no-cache curl
-RUN apk add --no-cache libxml2-dev libxslt-dev
-RUN apk add --no-cache netcat-openbsd
-RUN apk add --no-cache postgresql-client
-RUN apk add --no-cache postgresql-dev
-RUN apk add --no-cache sudo
-RUN apk add --no-cache vim
-RUN apk add --no-cache tzdata
+RUN apk add --no-cache \
+    build-base \
+    curl \
+    libxml2-dev libxslt-dev \
+    netcat-openbsd \
+    postgresql-client \
+    postgresql-dev \
+    sudo \
+    tzdata \
+    vim
+
+ENV YARN_CACHE_FOLDER=/home/appuser/.cache/yarn
 
 RUN addgroup -g 1000 appuser \
     && adduser -u 1000 -G appuser -s /bin/sh -D appuser
 
 RUN echo 'appuser ALL=(ALL:ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-ENV YARN_CACHE_FOLDER=/home/appuser/.cache/yarn
-
 RUN mkdir -p $APP_HOME \
     && chown -R appuser:appuser $APP_HOME \
     && chmod 755 $APP_HOME
 
-WORKDIR $APP_HOME
 USER appuser
 
 RUN mkdir -p $YARN_CACHE_FOLDER
 RUN mkdir -p ~/.ssh ; echo "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+
+WORKDIR $APP_HOME

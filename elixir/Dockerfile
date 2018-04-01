@@ -17,6 +17,6 @@ WORKDIR $APP_HOME
 
 USER appuser
 
-RUN mix local.hex --force
+RUN mix do local.rebar --force, local.hex --force
 
 USER root
